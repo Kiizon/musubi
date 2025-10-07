@@ -10,8 +10,13 @@ import SwiftUI
 @main
 struct musubiApp: App {
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra("Musubi", systemImage: "timer") {
+            ContentView().frame(width: 240, height: 100)
+            Divider()
+            Button("Quit") {
+                NSApplication.shared.terminate(nil)
+            }
         }
+        .menuBarExtraStyle(.window)
     }
 }
