@@ -13,6 +13,15 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+            
+            VStack(alignment: .leading) {
+                Text("Duration: \(Int(sliderMinutes)) min")
+                Slider(value: $sliderMinutes, in: 1...120, step: 1)
+                    .onChange(of: sliderMinutes) { oldValue, newValue in
+                        vm.setDuration(minutes: Int(newValue))
+                    }
+            }
+            
             Text(formatTime(vm.remainingTime))
                 .monospacedDigit()
 
