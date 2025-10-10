@@ -6,42 +6,37 @@
 //
 
 import SwiftUI
-import Combine
 
 struct ContentView: View {
-    @State private var timeRemaining: Double = 1500
-    @State private var isEditing: Bool = false
-    
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
+    @StateObject private var vm = TimerViewModel(minutes: 25)
+    @State private var sliderMinutes: Double = 25
+
     var body: some View {
         VStack {
-            Slider(
-                value: $timeRemaining,
-                in: 0...7200,
-                onEditingChanged: { editing in
-                    isEditing = editing
-                }
-            )
-            
-            Text(formatTime(Int(timeRemaining)))
-                .onReceive(timer) { _ in
-                    if timeRemaining > 0 {
-                        timeRemaining -= 1
-                    }
-                }
+            Text(formatTime(vm.remainingTime))
+                .monospacedDigit()
+
+            Button(vm.state == .running ? "Pause" : "Start") {
+                vm.state == .running ? vm.pause() : vm.start()
+            }
+            .buttonStyle(.borderedProminent)
+
+            Text(label(for: vm.state))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
         .padding()
+        .onDisappear { vm.pause() }
+    }
+
+    private func label(for state: TimerViewModel.State) -> String {
+        switch state {
+        case .idle: return "Idle"
+        case .running: return "Running"
+        case .paused: return "Paused"
+        case .finished: return "Finished"
+        }
     }
 }
 
-func formatTime(_ seconds: Int) -> String {
-    let remainingHours = seconds / 3600
-    let remainingMinutes = (seconds % 3600) / 60
-    let remainingSeconds = seconds.remainderReportingOverflow(dividingBy: 60).partialValue
-    return String(format: "%02d:%02d:%02d", remainingHours, remainingMinutes, remainingSeconds)
-}
-
-#Preview {
-    ContentView()
-}
+#Preview { ContentView() }

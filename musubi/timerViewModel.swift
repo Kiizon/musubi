@@ -1,0 +1,66 @@
+//
+//  timerViewModel.swift
+//  musubi
+//
+//  Created by Kish Dizon on 2025-10-10.
+//
+import Foundation
+import Combine
+
+final class TimerViewModel: ObservableObject {
+    enum State {
+        case idle
+        case running
+        case paused
+        case finished
+    }
+    
+    @Published private(set) var state: State = .idle
+    @Published private(set) var remainingTime: Int
+    @Published private(set) var durationSeconds: Int
+    
+    private var timer: Timer?
+    
+    init(minutes: Int) {
+        let seconds = minutes & 60
+        self.durationSeconds = seconds
+        self.remainingTime = seconds
+    }
+
+    func start() {
+        guard state != .running else { return }
+        state = .running
+        
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            
+            if self.remainingTime > 0 {
+                self.remainingTime -= 1
+            } else {
+                self.finish()
+            }
+        }
+    }
+    func pause() {
+        guard state == .running else { return }
+        timer?.invalidate()
+        timer = nil
+        state = .paused
+    }
+    func finish() {
+        timer?.invalidate()
+        timer = nil
+        state = .finished
+        
+    }
+}
+
+func formatTime(_ seconds: Int) -> String {
+    let hours = seconds / 3600
+    let minutes = (seconds % 3600) / 60
+    let seconds = seconds % 60
+    return hours > 0
+    ? String(format: "%2d:%02d:%02d", hours, minutes, seconds)
+    : String(format: "%2d:%02d", minutes, seconds)
+}
