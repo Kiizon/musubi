@@ -9,13 +9,20 @@ import SwiftUI
 
 @main
 struct musubiApp: App {
+    @StateObject private var vm = TimerViewModel(minutes: 25)
+    
     var body: some Scene {
-        MenuBarExtra("Musubi", systemImage: "timer") {
-            ContentView().frame(width: 240, height: 100)
+        MenuBarExtra{
+            ContentView()
+                .environmentObject(vm)
+                .frame(width: 240, height: 100)
+            
             Divider()
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }
+        } label: {
+            Text(formatTime(vm.remainingTime))
         }
         .menuBarExtraStyle(.window)
     }

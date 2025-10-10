@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var vm = TimerViewModel(minutes: 25)
+    @EnvironmentObject var vm : TimerViewModel
     @State private var sliderMinutes: Double = 25
 
     var body: some View {
