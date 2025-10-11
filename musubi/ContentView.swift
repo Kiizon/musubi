@@ -28,8 +28,8 @@ struct ContentView: View {
                         } else {
                             vm.start()
                         }
-                        
                     }
+                    .buttonStyle(PlainButtonStyle())
                     Button("10m") {
                         vm.setDuration(minutes: 10)
                         if vm.state == .running {
@@ -38,6 +38,7 @@ struct ContentView: View {
                             vm.start()
                         }
                     }
+                    .buttonStyle(PlainButtonStyle())
                     Button("25m") {
                         vm.setDuration(minutes: 25)
                         if vm.state == .running {
@@ -47,21 +48,39 @@ struct ContentView: View {
                         }
                         
                     }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Spacer()
+                    
+                    Button {
+                        NSApplication.shared.terminate(nil)
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.primary)
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                }
+                
+                HStack {
+                    Button(vm.state == .running ? "Pause" : "Start"){
+                        if vm.state == .running {
+                            vm.pause()
+                        } else {
+                            vm.start()
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .disabled(vm.remainingTime == 0)
+                    
+                    Spacer()
+                    
+                    Text(formatTime(vm.remainingTime))
+                        .monospacedDigit()
+                        .font(Font.largeTitle.monospacedDigit())
+                    
                 }
             }
-            
-            Text(formatTime(vm.remainingTime))
-                .monospacedDigit()
-
-            Button(vm.state == .running ? "Pause" : "Start"){
-                if vm.state == .running {
-                    vm.pause()
-                } else {
-                    vm.start()
-                }
-            }
-            .buttonStyle(PlainButtonStyle())
-            .disabled(vm.remainingTime == 0)
         }
         .padding()
     }
