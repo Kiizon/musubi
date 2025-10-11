@@ -42,14 +42,16 @@ final class TimerViewModel: ObservableObject {
         
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self = self else {
+                return
+                        }
             
-            if self.remainingTime > 0 {
-                self.remainingTime -= 1
-            } else {
-                self.finish()
-            }
+                if self.remainingTime > 0 {
+                    self.remainingTime -= 1
+                } else { self.finish() }
+                
         }
+        RunLoop.main.add(timer!, forMode: .common)
     }
     func pause() {
         guard state == .running else { return }

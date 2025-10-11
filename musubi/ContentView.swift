@@ -34,7 +34,6 @@ struct ContentView: View {
             .buttonStyle(PlainButtonStyle())
         }
         .padding()
-        .onDisappear { vm.pause() }
     }
 
     private func label(for state: TimerViewModel.State) -> String {
