@@ -10,81 +10,60 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var vm : TimerViewModel
     @State private var sliderMinutes: Double = 25
-
+    
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            Slider(value: $sliderMinutes, in: 0...120, step: 1)
+                .onChange(of: sliderMinutes) { oldValue, newValue in
+                    vm.setDuration(minutes: Int(newValue))
+                }
             
-            VStack(alignment: .leading) {
-                Slider(value: $sliderMinutes, in: 0...120, step: 1)
-                    .onChange(of: sliderMinutes) { oldValue, newValue in
-                        vm.setDuration(minutes: Int(newValue))
-                    }
+            HStack {
+                Button("5m")  { setAndToggle(5)  }
+                    .buttonStyle(.plain)
+                    .hoverBackground()
                 
-                HStack {
-                    Button("5m") {
-                        vm.setDuration(minutes: 5)
-                        if vm.state == .running {
-                            vm.pause()
-                        } else {
-                            vm.start()
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    Button("10m") {
-                        vm.setDuration(minutes: 10)
-                        if vm.state == .running {
-                            vm.pause()
-                        } else {
-                            vm.start()
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    Button("25m") {
-                        vm.setDuration(minutes: 25)
-                        if vm.state == .running {
-                            vm.pause()
-                        } else {
-                            vm.start()
-                        }
-                        
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    Spacer()
-                    
-                    Button {
-                        NSApplication.shared.terminate(nil)
-                    } label: {
-                        Image(systemName: "ellipsis")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.primary)
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                }
+                Button("10m") { setAndToggle(10) }
+                    .buttonStyle(.plain)
+                    .hoverBackground()
                 
-                HStack {
-                    Button(vm.state == .running ? "Pause" : "Start"){
-                        if vm.state == .running {
-                            vm.pause()
-                        } else {
-                            vm.start()
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .disabled(vm.remainingTime == 0)
-                    
-                    Spacer()
-                    
-                    Text(formatTime(vm.remainingTime))
-                        .monospacedDigit()
-                        .font(Font.largeTitle.monospacedDigit())
-                    
+                Button("15m") { setAndToggle(15) }
+                    .buttonStyle(.plain)
+                    .hoverBackground()
+                
+                Spacer()
+                
+                Button {
+                    NSApplication.shared.terminate(nil)
+                } label: {
+                    Image(systemName: "ellipsis")
                 }
+                .buttonStyle(.borderless)
+                .hoverBackground()
+            }
+            
+            Spacer()
+            
+            // Bottom bar
+            HStack {
+                Button(vm.state == .running ? "stop" : "start") {
+                    startAndStop()
+                }
+                .buttonStyle(.plain)
+                .disabled(vm.remainingTime == 0)
+                .hoverBackground()
+                
+                Spacer()
+                
+                Text(formatTime(vm.remainingTime))
+                    .monospacedDigit()
+                    .font(.largeTitle.monospacedDigit())
             }
         }
-        .padding()
+        .padding(16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
-
+// MARK: - Actions
     private func label(for state: TimerViewModel.State) -> String {
         switch state {
         case .idle: return "Idle"
@@ -93,6 +72,49 @@ struct ContentView: View {
         case .finished: return "Finished"
         }
     }
+    private func setAndToggle(_ minutes: Int) {
+        vm.setDuration(minutes: 10)
+        if vm.state == .running {
+            vm.pause()
+        } else {
+            vm.start()
+        }
+    }
+    private func startAndStop() {
+        if vm.state == .running {
+            vm.pause()
+        } else {
+            vm.start()
+        }
+    }
 }
+// MARK: - Hover background helper
+
+private struct HoverBackground: ViewModifier {
+    @State private var hovering = false
+    var color: Color = .gray.opacity(0.15)
+    var radius: CGFloat = 6
+    var insets = EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
+
+    func body(content: Content) -> some View {
+        content
+            .padding(insets)
+            .background(
+                RoundedRectangle(cornerRadius: radius)
+                    .fill(hovering ? color : .clear)
+            )
+            .onHover { hovering = $0 }
+            .animation(.easeInOut(duration: 0.15), value: hovering)
+    }
+}
+private extension View {
+    func hoverBackground(
+        color: Color = .gray.opacity(0.15),
+        radius: CGFloat = 6
+    ) -> some View {
+        modifier(HoverBackground(color: color, radius: radius))
+    }
+}
+
 
 #Preview { ContentView() }

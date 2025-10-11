@@ -15,9 +15,8 @@ struct musubiApp: App {
         MenuBarExtra{
             ContentView()
                 .environmentObject(vm)
-                .frame(width: 300, height: 100)
+                .frame(width: 250, height: 140)
             
-            Divider()
             
         } label: {
             Text(formatTime(vm.remainingTime))
