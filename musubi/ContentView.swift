@@ -15,7 +15,7 @@ struct ContentView: View {
         VStack {
             
             VStack(alignment: .leading) {
-                Slider(value: $sliderMinutes, in: 1...120, step: 1)
+                Slider(value: $sliderMinutes, in: 0...120, step: 1)
                     .onChange(of: sliderMinutes) { oldValue, newValue in
                         vm.setDuration(minutes: Int(newValue))
                     }
@@ -32,6 +32,7 @@ struct ContentView: View {
                 }
             }
             .buttonStyle(PlainButtonStyle())
+            .disabled(vm.remainingTime == 0)
         }
         .padding()
     }
