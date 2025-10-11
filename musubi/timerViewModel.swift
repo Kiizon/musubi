@@ -6,6 +6,7 @@
 //
 import Foundation
 import Combine
+import AppKit
 
 final class TimerViewModel: ObservableObject {
     enum State {
@@ -60,6 +61,7 @@ final class TimerViewModel: ObservableObject {
         timer?.invalidate()
         timer = nil
         state = .finished
+        playAlarm()
         
     }
 }
@@ -71,4 +73,9 @@ func formatTime(_ seconds: Int) -> String {
     return hours > 0
     ? String(format: "%2d:%02d:%02d", hours, minutes, seconds)
     : String(format: "%2d:%02d", minutes, seconds)
+}
+func playAlarm() {
+    if let alarmSound =  NSSound(named: "Glass"){
+        alarmSound.play()
+    }
 }
