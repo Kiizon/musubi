@@ -23,15 +23,28 @@ struct ContentView: View {
                 HStack {
                     Button("5m") {
                         vm.setDuration(minutes: 5)
+                        if vm.state == .running {
+                            vm.pause()
+                        } else {
+                            vm.start()
+                        }
                         
                     }
                     Button("10m") {
                         vm.setDuration(minutes: 10)
-                        
+                        if vm.state == .running {
+                            vm.pause()
+                        } else {
+                            vm.start()
+                        }
                     }
                     Button("25m") {
                         vm.setDuration(minutes: 25)
-                        
+                        if vm.state == .running {
+                            vm.pause()
+                        } else {
+                            vm.start()
+                        }
                         
                     }
                 }

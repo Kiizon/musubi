@@ -18,15 +18,6 @@ struct musubiApp: App {
                 .frame(width: 300, height: 100)
             
             Divider()
-            Button {
-                NSApplication.shared.terminate(nil)
-            } label: {
-                Image(systemName: "ellipsis")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.primary)
-            }
-            .buttonStyle(BorderlessButtonStyle())
-            Divider()
             
         } label: {
             Text(formatTime(vm.remainingTime))
