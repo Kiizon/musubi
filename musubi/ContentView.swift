@@ -15,7 +15,6 @@ struct ContentView: View {
         VStack {
             
             VStack(alignment: .leading) {
-                Text("Duration: \(Int(sliderMinutes)) min")
                 Slider(value: $sliderMinutes, in: 1...120, step: 1)
                     .onChange(of: sliderMinutes) { oldValue, newValue in
                         vm.setDuration(minutes: Int(newValue))
@@ -25,14 +24,14 @@ struct ContentView: View {
             Text(formatTime(vm.remainingTime))
                 .monospacedDigit()
 
-            Button(vm.state == .running ? "Pause" : "Start") {
-                vm.state == .running ? vm.pause() : vm.start()
+            Button(vm.state == .running ? "Pause" : "Start"){
+                if vm.state == .running {
+                    vm.pause()
+                } else {
+                    vm.start()
+                }
             }
-            .buttonStyle(.borderedProminent)
-
-            Text(label(for: vm.state))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            .buttonStyle(PlainButtonStyle())
         }
         .padding()
         .onDisappear { vm.pause() }
