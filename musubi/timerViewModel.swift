@@ -29,9 +29,8 @@ final class TimerViewModel: ObservableObject {
     }
     
     func setDuration(minutes: Int) {
-        let clamped = max(0, min(120, minutes))   // choose your bounds
+        let clamped = max(0, min(120, minutes))
         durationSeconds = clamped * 60
-        // policy: changing duration resets the session to idle
         pause()
         remainingTime = durationSeconds
         state = .idle

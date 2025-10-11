@@ -19,6 +19,22 @@ struct ContentView: View {
                     .onChange(of: sliderMinutes) { oldValue, newValue in
                         vm.setDuration(minutes: Int(newValue))
                     }
+                
+                HStack {
+                    Button("5m") {
+                        vm.setDuration(minutes: 5)
+                        
+                    }
+                    Button("10m") {
+                        vm.setDuration(minutes: 10)
+                        
+                    }
+                    Button("25m") {
+                        vm.setDuration(minutes: 25)
+                        
+                        
+                    }
+                }
             }
             
             Text(formatTime(vm.remainingTime))

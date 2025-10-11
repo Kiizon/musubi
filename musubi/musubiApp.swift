@@ -15,12 +15,19 @@ struct musubiApp: App {
         MenuBarExtra{
             ContentView()
                 .environmentObject(vm)
-                .frame(width: 240, height: 100)
+                .frame(width: 300, height: 100)
             
             Divider()
-            Button("Quit") {
+            Button {
                 NSApplication.shared.terminate(nil)
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.primary)
             }
+            .buttonStyle(BorderlessButtonStyle())
+            Divider()
+            
         } label: {
             Text(formatTime(vm.remainingTime))
         }
