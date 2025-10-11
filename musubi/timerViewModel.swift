@@ -23,7 +23,7 @@ final class TimerViewModel: ObservableObject {
     private var timer: Timer?
     
     init(minutes: Int) {
-        let seconds = minutes & 60
+        let seconds = minutes * 60
         self.durationSeconds = seconds
         self.remainingTime = seconds
     }
