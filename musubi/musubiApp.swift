@@ -27,10 +27,12 @@ struct musubiApp: App {
 func pillTemplateImage(_ text: String) -> Image {
     let pill = Text(text)
         .font(.system(size: 12, weight: .semibold))
+        .frame(width: 40, height: 15)
         .padding(.horizontal, 6)
         .padding(.vertical, 1)
         .overlay(
-            Capsule().stroke(Color.primary, lineWidth: 1)
+            RoundedRectangle(cornerSize: CGSize(width: 5, height: 5))
+                .opacity(0.1)
         )
         .padding(1)
 
