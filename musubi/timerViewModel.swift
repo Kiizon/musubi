@@ -67,10 +67,8 @@ final class TimerViewModel: ObservableObject {
     }
     func playAlarm() {
         if let alarmSound = NSSound(named: "Glass") {
-            while state == .finished {
-                for _ in 0..<60 {
+            if state == .finished {
                     alarmSound.play()
-                }
             }
         }
     }
