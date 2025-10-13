@@ -80,6 +80,16 @@ func formatTime(_ seconds: Int) -> String {
     let seconds = seconds % 60
     return hours > 0
     ? String(format: "%2d:%02d:%02d", hours, minutes, seconds)
-    : String(format: "%2d:%02d", minutes, seconds)
+    : String(format: "%02d:%02d", minutes, seconds)
+}
+func formatTimeForMenubar(_ seconds: Int) -> String {
+    let hours = seconds / 3600
+    let minutes = (seconds % 3600) / 60
+    let seconds = seconds % 60
+    if hours > 0 {
+        return String(format: "%2dh% 02dm", hours, minutes)
+    } else {
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 }
 

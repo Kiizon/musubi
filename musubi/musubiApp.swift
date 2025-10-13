@@ -19,15 +19,15 @@ struct musubiApp: App {
             
             
         } label: {
-            pillTemplateImage(formatTime(vm.remainingTime))
+            pillTemplateImage(formatTimeForMenubar(vm.remainingTime))
         }
         .menuBarExtraStyle(.window)
     }
 }
 func pillTemplateImage(_ text: String) -> Image {
     let pill = Text(text)
-        .font(.system(size: 12, weight: .semibold))
-        .frame(width: 40, height: 15)
+        .font(.system(size: 10, weight: .semibold))
+        .frame(width: 45, height: 15)
         .padding(.horizontal, 6)
         .padding(.vertical, 1)
         .overlay(
