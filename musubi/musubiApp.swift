@@ -19,8 +19,25 @@ struct musubiApp: App {
             
             
         } label: {
-            Text(formatTime(vm.remainingTime))
+            pillTemplateImage(formatTime(vm.remainingTime))
         }
         .menuBarExtraStyle(.window)
     }
+}
+func pillTemplateImage(_ text: String) -> Image {
+    let pill = Text(text)
+        .font(.system(size: 12, weight: .semibold))
+        .padding(.horizontal, 6)
+        .padding(.vertical, 1)
+        .overlay(
+            Capsule().stroke(Color.primary, lineWidth: 1)
+        )
+        .padding(1)
+
+    let r = ImageRenderer(content: pill)
+    r.scale = NSScreen.main?.backingScaleFactor ?? 2
+
+    guard let ns = r.nsImage else { return Image(systemName: "timer") }
+    ns.isTemplate = true
+    return Image(nsImage: ns).renderingMode(.template)
 }

@@ -27,7 +27,7 @@ struct ContentView: View {
                     .buttonStyle(.plain)
                     .hoverBackground()
                 
-                Button("15m") { setAndToggle(15) }
+                Button("15m") { setAndToggle(25) }
                     .buttonStyle(.plain)
                     .hoverBackground()
                 
