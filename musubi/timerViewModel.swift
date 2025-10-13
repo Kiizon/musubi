@@ -65,6 +65,15 @@ final class TimerViewModel: ObservableObject {
         playAlarm()
         
     }
+    func playAlarm() {
+        if let alarmSound = NSSound(named: "Glass") {
+            while state == .finished {
+                for _ in 0..<60 {
+                    alarmSound.play()
+                }
+            }
+        }
+    }
 }
 
 func formatTime(_ seconds: Int) -> String {
@@ -75,8 +84,4 @@ func formatTime(_ seconds: Int) -> String {
     ? String(format: "%2d:%02d:%02d", hours, minutes, seconds)
     : String(format: "%2d:%02d", minutes, seconds)
 }
-func playAlarm() {
-    if let alarmSound =  NSSound(named: "Glass"){
-        alarmSound.play()
-    }
-}
+
