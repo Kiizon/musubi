@@ -148,7 +148,7 @@ private struct PopoverMenu: View {
 
             Button("About Mubushi") {
                 NSApp.orderFrontStandardAboutPanel(nil)
-                showPopover = false
+                NSApp.activate(ignoringOtherApps: true)
             }
             .buttonStyle(.plain)
             .hoverBackground()
