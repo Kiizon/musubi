@@ -11,6 +11,9 @@ struct ContentView: View {
     @EnvironmentObject var vm : TimerViewModel
     @State private var sliderMinutes: Double = 25
     
+    @State private var showPopover = false
+    @AppStorage("showFloatingDisplay") private var showFloatingDisplay = false
+    
     var body: some View {
         VStack(alignment: .leading) {
             Slider(value: $sliderMinutes, in: 0...120, step: 1)
@@ -27,24 +30,32 @@ struct ContentView: View {
                     .buttonStyle(.plain)
                     .hoverBackground()
                 
-                Button("15m") { setAndToggle(25) }
+                Button("25m") { setAndToggle(25) }
                     .buttonStyle(.plain)
                     .hoverBackground()
                 
                 Spacer()
                 
                 Button {
-                    NSApplication.shared.terminate(nil)
+                    showPopover.toggle()
                 } label: {
                     Image(systemName: "ellipsis")
+                        .font(.title3)
+                        .hoverBackground()
                 }
-                .buttonStyle(.borderless)
-                .hoverBackground()
+                .buttonStyle(.plain)
+                .popover(isPresented: $showPopover,attachmentAnchor: .rect(.bounds),arrowEdge: .top) {
+                    PopoverMenu(
+                        showPopover: $showPopover,
+                        showFloatingDisplay: $showFloatingDisplay
+                    )
+                    .frame(width: 150)
+                    .padding(8)
+                }
             }
             
             Spacer()
             
-            // Bottom bar
             HStack {
                 Button(vm.state == .running ? "stop" : "start") {
                     startAndStop()
@@ -63,7 +74,8 @@ struct ContentView: View {
         .padding(16)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
-// MARK: - Actions
+
+    // MARK: - Actions
     private func label(for state: TimerViewModel.State) -> String {
         switch state {
         case .idle: return "Idle"
@@ -73,7 +85,7 @@ struct ContentView: View {
         }
     }
     private func setAndToggle(_ minutes: Int) {
-        vm.setDuration(minutes: 10)
+        vm.setDuration(minutes: minutes)
         if vm.state == .running {
             vm.pause()
         } else {
@@ -88,8 +100,7 @@ struct ContentView: View {
         }
     }
 }
-// MARK: - Hover background helper
-
+// MARK: - Helpers
 private struct HoverBackground: ViewModifier {
     @State private var hovering = false
     var color: Color = .gray.opacity(0.15)
@@ -115,6 +126,41 @@ private extension View {
         modifier(HoverBackground(color: color, radius: radius))
     }
 }
+private struct PopoverMenu: View {
+    @Binding var showPopover: Bool
+    @Binding var showFloatingDisplay: Bool
 
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Button("Settings…") {
+
+            }
+            .buttonStyle(.plain)
+            .hoverBackground()
+
+            Button("Show Floating Display") {
+                
+            }
+            .buttonStyle(.plain)
+            .hoverBackground()
+
+            Divider()
+
+            Button("About Mubushi") {
+                NSApp.orderFrontStandardAboutPanel(nil)
+                showPopover = false
+            }
+            .buttonStyle(.plain)
+            .hoverBackground()
+
+            Button("Quit") {
+                NSApplication.shared.terminate(nil)
+            }
+            .buttonStyle(.plain)
+            .hoverBackground()
+        }
+        .padding(0)
+    }
+}
 
 #Preview { ContentView() }
