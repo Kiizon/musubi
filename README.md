@@ -2,6 +2,8 @@
 
 A dead simple macOS timer app.
 
+![Demo](demo.gif)
+
 ## Why?
 
 Because I'm not paying $20 for the onigiri timer app lol.
