@@ -52,11 +52,12 @@ struct TasksView: View {
                 LazyVStack(alignment: .leading, spacing: 6) {
                     ForEach(tasksForDate) { task in
                         HStack {
-                            Button(action: { vm.toggleDone(for: task.id)}) {
-                                Image(systemName: task.isDone ? "checkmark.square" : "square")
-                            }
-                            .buttonStyle(.plain)
-                            Text(task.name)
+                            TaskRow(
+                                task: task,
+                                onToggleDone: {vm.toggleDone(for : task.id)},
+                                onRename: {newName in vm.renameTask(for: task.id, to: newName)},
+                                onDelete: {vm.deleteTask(for: task.id)}
+                            )
                         }
                     }
                 }

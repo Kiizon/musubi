@@ -47,6 +47,13 @@ final class TasksViewModel: ObservableObject {
         guard let index = tasks.firstIndex(where: {$0.id == id}) else { return }
         tasks[index].isDone.toggle()
     }
+    func renameTask(for id: UUID, to newName: String) {
+        guard let index = tasks.firstIndex(where: {$0.id == id}) else { return }
+        tasks[index].name = newName
+    }
+    func deleteTask(for id: UUID) {
+        tasks.removeAll(where: {$0.id == id})
+    }
     
     
 }

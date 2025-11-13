@@ -8,7 +8,7 @@ import Foundation
 
 struct TaskItem:  Identifiable, Codable, Equatable{
     let id: UUID
-    let name: String
+    var name: String
     var isDone: Bool
     let date: Date
     
