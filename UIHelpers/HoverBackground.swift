@@ -19,6 +19,7 @@ struct HoverBackground: ViewModifier {
                 RoundedRectangle(cornerRadius: radius)
                     .fill(hovering ? color : .clear)
             )
+            .contentShape(Rectangle())
             .onHover { hovering = $0 }
             .animation(.easeInOut(duration: 0.15), value: hovering)
     }

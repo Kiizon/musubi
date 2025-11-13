@@ -39,8 +39,8 @@ final class TasksViewModel: ObservableObject {
         }
     }
     // MARK: - API
-    func addTask(name: String) {
-        let task = TaskItem(id: UUID(), name: name, isDone: false, date: Date())
+    func addTask(name: String, date: Date) {
+        let task = TaskItem(id: UUID(), name: name, isDone: false, date: date)
         tasks.append(task)
     }
     func toggleDone(for id: UUID) {

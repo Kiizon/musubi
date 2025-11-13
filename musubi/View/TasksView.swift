@@ -34,17 +34,17 @@ struct TasksView: View {
             HStack {
                 Button(action: { shiftDay(by: -1) }) {
                     Image(systemName: "chevron.left")
+                        .hoverBackground()
                 }
                 .buttonStyle(.plain)
-                .hoverBackground()
                 Spacer()
                 Text(formatter(date: date))
                 Spacer()
                 Button(action: { shiftDay(by: 1) }) {
                     Image(systemName: "chevron.right")
+                        .hoverBackground()
                 }
                 .buttonStyle(.plain)
-                .hoverBackground()
             }
             .padding(2)
             
@@ -66,7 +66,7 @@ struct TasksView: View {
                 TextField("New Task", text: $text)
                     .onSubmit {
                         if !text.isEmpty {
-                            vm.addTask(name: text)
+                            vm.addTask(name: text, date: date)
                             text = ""
                         }
                     }
