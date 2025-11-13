@@ -1,12 +1,9 @@
 # musubi 🍙
 
-A dead simple macOS timer app.
+A dead simple macOS timer app with a task tracker.
 
 ![Demo](demo.gif)
 
-## Why?
-
-Because I'm not paying $20 for the onigiri timer app lol.
 
 ## What it does
 
@@ -15,6 +12,7 @@ Because I'm not paying $20 for the onigiri timer app lol.
 - Start/stop controls
 - Plays a sound when the timer finishes
 - Clean, minimal interface
+- Tasks
 
 ## Tech
 
