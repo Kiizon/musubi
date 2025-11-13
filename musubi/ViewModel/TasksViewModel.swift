@@ -8,8 +8,37 @@ import Foundation
 import Combine
 
 final class TasksViewModel: ObservableObject {
-    @Published var tasks: [TaskItem] = []
+    @Published var tasks: [TaskItem] = [] {
+        didSet {
+            saveTasks()
+        }
+    }
     
+    private let storage_key = "tasks_storage"
+    
+    init() {
+        loadTasks()
+    }
+    
+    //MARK: - Persistence
+    private func saveTasks() {
+        do {
+            let data = try JSONEncoder().encode(tasks)
+            UserDefaults.standard.set(data, forKey: storage_key)
+        } catch {
+            print("Failed to save tasks: \(error)")
+        }
+    }
+    private func loadTasks() {
+        guard let data = UserDefaults.standard.data(forKey: storage_key) else { return }
+        do {
+            let savedTasks = try JSONDecoder().decode([TaskItem].self, from: data)
+            self.tasks = savedTasks
+        } catch {
+            print("Failed to load tasks: \(error)" )
+        }
+    }
+    // MARK: - API
     func addTask(name: String) {
         let task = TaskItem(id: UUID(), name: name, isDone: false, date: Date())
         tasks.append(task)
