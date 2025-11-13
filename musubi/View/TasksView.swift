@@ -1,0 +1,82 @@
+//
+//  TasksView.swift
+//  musubi
+//
+//  Created by Kish Dizon on 2025-11-12.
+//
+import SwiftUI
+
+struct TasksView: View {
+    @EnvironmentObject var vm: TasksViewModel
+    
+    @State private var text: String = ""
+    @State private var date: Date = Date()
+    private var tasksForDate: [TaskItem] {
+        let calendar = Calendar.current
+        return vm.tasks.filter { task in
+            calendar.isDate(task.date, inSameDayAs: date)
+        }
+    }
+    private func shiftDay(by value: Int){
+        if let newDate = Calendar.current.date(byAdding: .day, value: value, to: date) {
+            date = newDate
+        }
+    }
+    private func formatter(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
+    
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Button(action: { shiftDay(by: -1) }) {
+                    Image(systemName: "chevron.left")
+                        .hoverBackground()
+                }
+                .buttonStyle(.plain)
+                Spacer()
+                Text(formatter(date: date))
+                Spacer()
+                Button(action: { shiftDay(by: 1) }) {
+                    Image(systemName: "chevron.right")
+                        .hoverBackground()
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(2)
+            
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 6) {
+                    ForEach(tasksForDate) { task in
+                        HStack {
+                            TaskRow(
+                                task: task,
+                                onToggleDone: {vm.toggleDone(for : task.id)},
+                                onRename: {newName in vm.renameTask(for: task.id, to: newName)},
+                                onDelete: {vm.deleteTask(for: task.id)}
+                            )
+                        }
+                    }
+                }
+            }
+            HStack {
+                Image(systemName: "plus")
+                TextField("New Task", text: $text)
+                    .onSubmit {
+                        if !text.isEmpty {
+                            vm.addTask(name: text, date: date)
+                            text = ""
+                        }
+                    }
+                    .textFieldStyle(.plain)
+                    .padding(5)
+                
+            }
+            
+        }
+        .padding(12)
+    }
+}
