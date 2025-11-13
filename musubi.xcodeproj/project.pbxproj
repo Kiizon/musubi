@@ -7,13 +7,18 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		DB0EFB152E95DEBE0049314E /* musubi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musubi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBC484A62EC56095007B34B0 /* musubi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musubi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DB0EFB172E95DEBE0049314E /* musubi */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = musubi;
+			sourceTree = "<group>";
+		};
+		DBF042D72EC58D070037A6DE /* UIHelpers */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UIHelpers;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +38,9 @@
 			isa = PBXGroup;
 			children = (
 				DB0EFB172E95DEBE0049314E /* musubi */,
-				DB0EFB162E95DEBE0049314E /* Products */,
+				DBC484A62EC56095007B34B0 /* musubi.app */,
+				DBF042D72EC58D070037A6DE /* UIHelpers */,
 			);
-			sourceTree = "<group>";
-		};
-		DB0EFB162E95DEBE0049314E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DB0EFB152E95DEBE0049314E /* musubi.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -62,12 +60,13 @@
 			);
 			fileSystemSynchronizedGroups = (
 				DB0EFB172E95DEBE0049314E /* musubi */,
+				DBF042D72EC58D070037A6DE /* UIHelpers */,
 			);
 			name = musubi;
 			packageProductDependencies = (
 			);
 			productName = musubi;
-			productReference = DB0EFB152E95DEBE0049314E /* musubi.app */;
+			productReference = DBC484A62EC56095007B34B0 /* musubi.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -95,7 +94,7 @@
 			mainGroup = DB0EFB0C2E95DEBE0049314E;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = DB0EFB162E95DEBE0049314E /* Products */;
+			productRefGroup = DB0EFB0C2E95DEBE0049314E;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
