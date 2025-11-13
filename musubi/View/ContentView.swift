@@ -71,7 +71,7 @@ struct ContentView: View {
                     .font(.largeTitle.monospacedDigit())
             }
         }
-        .padding(16)
+        .padding(12)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 

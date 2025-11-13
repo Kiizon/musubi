@@ -9,20 +9,23 @@ import SwiftUI
 
 @main
 struct musubiApp: App {
-    @StateObject private var vm = TimerViewModel(minutes: 25)
+    @StateObject private var timerVM = TimerViewModel(minutes: 25)
+    @StateObject private var tasksVM = TasksViewModel()
     
     var body: some Scene {
         MenuBarExtra{
             ContentView()
-                .environmentObject(vm)
-                .frame(width: 250, height: 140)
-            
-            
+                .environmentObject(timerVM)
+                .frame(height: 140)
+            Divider()
+            TasksView()
+                .environmentObject(tasksVM)
         } label: {
-            pillTemplateImage(formatTimeForMenubar(vm.remainingTime))
+            pillTemplateImage(formatTimeForMenubar(timerVM.remainingTime))
         }
         .menuBarExtraStyle(.window)
     }
+    
 }
 func pillTemplateImage(_ text: String) -> Image {
     let pill = Text(text)
