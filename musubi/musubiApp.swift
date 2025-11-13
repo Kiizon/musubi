@@ -14,18 +14,25 @@ struct musubiApp: App {
     
     var body: some Scene {
         MenuBarExtra{
-            ContentView()
-                .environmentObject(timerVM)
-                .frame(height: 140)
-            Divider()
-            TasksView()
-                .environmentObject(tasksVM)
+            VStack{
+                ContentView()
+                    .environmentObject(timerVM)
+                    .frame(height: 140)
+                
+                Divider()
+                
+                TasksView()
+                    .environmentObject(tasksVM)
+                    .frame(maxHeight: .infinity)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+
         } label: {
             pillTemplateImage(formatTimeForMenubar(timerVM.remainingTime))
         }
         .menuBarExtraStyle(.window)
     }
-    
+
 }
 func pillTemplateImage(_ text: String) -> Image {
     let pill = Text(text)
