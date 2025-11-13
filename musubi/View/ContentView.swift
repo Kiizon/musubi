@@ -101,31 +101,6 @@ struct ContentView: View {
     }
 }
 // MARK: - Helpers
-private struct HoverBackground: ViewModifier {
-    @State private var hovering = false
-    var color: Color = .gray.opacity(0.15)
-    var radius: CGFloat = 6
-    var insets = EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
-
-    func body(content: Content) -> some View {
-        content
-            .padding(insets)
-            .background(
-                RoundedRectangle(cornerRadius: radius)
-                    .fill(hovering ? color : .clear)
-            )
-            .onHover { hovering = $0 }
-            .animation(.easeInOut(duration: 0.15), value: hovering)
-    }
-}
-private extension View {
-    func hoverBackground(
-        color: Color = .gray.opacity(0.15),
-        radius: CGFloat = 6
-    ) -> some View {
-        modifier(HoverBackground(color: color, radius: radius))
-    }
-}
 private struct PopoverMenu: View {
     @Binding var showPopover: Bool
     @Binding var showFloatingDisplay: Bool

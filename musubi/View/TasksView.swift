@@ -27,7 +27,8 @@ struct TasksView: View {
         formatter.dateStyle = .medium
         return formatter.string(from: date)
     }
-
+    
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -35,6 +36,7 @@ struct TasksView: View {
                     Image(systemName: "chevron.left")
                 }
                 .buttonStyle(.plain)
+                .hoverBackground()
                 Spacer()
                 Text(formatter(date: date))
                 Spacer()
@@ -42,9 +44,10 @@ struct TasksView: View {
                     Image(systemName: "chevron.right")
                 }
                 .buttonStyle(.plain)
+                .hoverBackground()
             }
             .padding(2)
-
+            
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 6) {
                     ForEach(tasksForDate) { task in
@@ -69,11 +72,10 @@ struct TasksView: View {
                     }
                     .textFieldStyle(.plain)
                     .padding(5)
-
+                
             }
             
         }
         .padding(12)
     }
 }
-

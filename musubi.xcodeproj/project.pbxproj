@@ -16,6 +16,11 @@
 			path = musubi;
 			sourceTree = "<group>";
 		};
+		DBF042D72EC58D070037A6DE /* UIHelpers */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UIHelpers;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +39,7 @@
 			children = (
 				DB0EFB172E95DEBE0049314E /* musubi */,
 				DBC484A62EC56095007B34B0 /* musubi.app */,
+				DBF042D72EC58D070037A6DE /* UIHelpers */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,6 +60,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				DB0EFB172E95DEBE0049314E /* musubi */,
+				DBF042D72EC58D070037A6DE /* UIHelpers */,
 			);
 			name = musubi;
 			packageProductDependencies = (
