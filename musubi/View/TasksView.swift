@@ -62,6 +62,8 @@ struct TasksView: View {
                     }
                 }
             }
+            .scrollIndicators(.hidden)
+            .frame(minHeight: 100)
             HStack {
                 Image(systemName: "plus")
                 TextField("New Task", text: $text)

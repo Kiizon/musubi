@@ -23,9 +23,7 @@ struct musubiApp: App {
                 
                 TasksView()
                     .environmentObject(tasksVM)
-                    .frame(maxHeight: .infinity)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
         } label: {
             pillTemplateImage(formatTimeForMenubar(timerVM.remainingTime))
