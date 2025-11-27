@@ -5,6 +5,7 @@
 //  Created by Kish Dizon on 2025-11-12.
 //
 import SwiftUI
+import Foundation
 
 struct TasksView: View {
     @EnvironmentObject var vm: TasksViewModel
@@ -38,7 +39,12 @@ struct TasksView: View {
                 }
                 .buttonStyle(.plain)
                 Spacer()
-                Text(formatter(date: date))
+                if Calendar.current.isDateInToday(date) {
+                    Text("Today")
+                } else {
+                    Text(formatter(date: date))
+                }
+
                 Spacer()
                 Button(action: { shiftDay(by: 1) }) {
                     Image(systemName: "chevron.right")
