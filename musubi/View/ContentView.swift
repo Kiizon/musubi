@@ -9,16 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var vm : TimerViewModel
-    @State private var sliderMinutes: Double = 25
-    
+    @State private var sliderMinutes: Int = 25
+
     @State private var showPopover = false
     @AppStorage("showFloatingDisplay") private var showFloatingDisplay = false
-    
+
     var body: some View {
         VStack(alignment: .leading) {
-            Slider(value: $sliderMinutes, in: 0...120, step: 1)
+            RulerSlider(value: $sliderMinutes, range: 0...120)
                 .onChange(of: sliderMinutes) { oldValue, newValue in
-                    vm.setDuration(minutes: Int(newValue))
+                    vm.setDuration(minutes: newValue)
                 }
             
             HStack {
@@ -85,6 +85,7 @@ struct ContentView: View {
         }
     }
     private func setAndToggle(_ minutes: Int) {
+        sliderMinutes = minutes
         vm.setDuration(minutes: minutes)
         if vm.state == .running {
             vm.pause()
