@@ -66,10 +66,11 @@ final class TimerViewModel: ObservableObject {
         
     }
     func playAlarm() {
+        guard state == .finished else { return }
         if let alarmSound = NSSound(named: "Glass") {
-            if state == .finished {
-                    alarmSound.play()
-            }
+            let volume = UserDefaults.standard.double(forKey: "alarmVolume")
+            alarmSound.volume = Float(volume > 0 ? volume : 0.5)
+            alarmSound.play()
         }
     }
 }

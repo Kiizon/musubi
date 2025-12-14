@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var vm : TimerViewModel
+    @EnvironmentObject var vm: TimerViewModel
+    @EnvironmentObject var settings: SettingsViewModel
     @State private var sliderMinutes: Int = 25
 
     @State private var showPopover = false
-    @AppStorage("showFloatingDisplay") private var showFloatingDisplay = false
+    @State private var showSettings = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,22 +21,22 @@ struct ContentView: View {
                 .onChange(of: sliderMinutes) { oldValue, newValue in
                     vm.setDuration(minutes: newValue)
                 }
-            
+
             HStack {
-                Button("5m")  { setAndToggle(5)  }
+                Button("\(settings.preset1)m") { setAndToggle(settings.preset1) }
                     .buttonStyle(.plain)
                     .hoverBackground()
-                
-                Button("10m") { setAndToggle(10) }
+
+                Button("\(settings.preset2)m") { setAndToggle(settings.preset2) }
                     .buttonStyle(.plain)
                     .hoverBackground()
-                
-                Button("25m") { setAndToggle(25) }
+
+                Button("\(settings.preset3)m") { setAndToggle(settings.preset3) }
                     .buttonStyle(.plain)
                     .hoverBackground()
-                
+
                 Spacer()
-                
+
                 Button {
                     showPopover.toggle()
                 } label: {
@@ -44,18 +45,19 @@ struct ContentView: View {
                         .hoverBackground()
                 }
                 .buttonStyle(.plain)
-                .popover(isPresented: $showPopover,attachmentAnchor: .rect(.bounds),arrowEdge: .top) {
+                .popover(isPresented: $showPopover, attachmentAnchor: .rect(.bounds), arrowEdge: .top) {
                     PopoverMenu(
                         showPopover: $showPopover,
-                        showFloatingDisplay: $showFloatingDisplay
+                        showSettings: $showSettings
                     )
+                    .environmentObject(settings)
                     .frame(width: 150)
                     .padding(8)
                 }
             }
-            
+
             Spacer()
-            
+
             HStack {
                 Button(vm.state == .running ? "stop" : "start") {
                     startAndStop()
@@ -63,16 +65,22 @@ struct ContentView: View {
                 .buttonStyle(.plain)
                 .disabled(vm.remainingTime == 0)
                 .hoverBackground()
-                
+
                 Spacer()
-                
+
                 Text(formatTime(vm.remainingTime))
                     .monospacedDigit()
                     .font(.largeTitle.monospacedDigit())
+                    .foregroundColor(settings.highContrastTimer ? .white : .primary)
+                    .shadow(color: settings.highContrastTimer ? .black.opacity(0.5) : .clear, radius: 1)
             }
         }
         .padding(12)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .popover(isPresented: $showSettings) {
+            SettingsView()
+                .environmentObject(settings)
+        }
     }
 
     // MARK: - Actions
@@ -103,26 +111,29 @@ struct ContentView: View {
 }
 // MARK: - Helpers
 private struct PopoverMenu: View {
+    @EnvironmentObject var settings: SettingsViewModel
     @Binding var showPopover: Bool
-    @Binding var showFloatingDisplay: Bool
+    @Binding var showSettings: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Button("Settings…") {
-
+                showPopover = false
+                showSettings = true
             }
             .buttonStyle(.plain)
             .hoverBackground()
 
-            Button("Show Floating Display") {
-                
+            Button(settings.showFloatingTimer ? "Hide Floating Timer" : "Show Floating Timer") {
+                settings.showFloatingTimer.toggle()
+                showPopover = false
             }
             .buttonStyle(.plain)
             .hoverBackground()
 
             Divider()
 
-            Button("About Mubushi") {
+            Button("About musubi") {
                 NSApp.orderFrontStandardAboutPanel(nil)
                 NSApp.activate(ignoringOtherApps: true)
             }

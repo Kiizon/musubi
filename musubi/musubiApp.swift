@@ -6,31 +6,73 @@
 //
 
 import SwiftUI
+import Combine
 
 @main
 struct musubiApp: App {
     @StateObject private var timerVM = TimerViewModel(minutes: 25)
     @StateObject private var tasksVM = TasksViewModel()
-    
+    @StateObject private var settingsVM = SettingsViewModel()
+    @StateObject private var floatingWindowController = FloatingWindowController()
+
     var body: some Scene {
-        MenuBarExtra{
-            VStack{
+        MenuBarExtra {
+            VStack {
                 ContentView()
                     .environmentObject(timerVM)
+                    .environmentObject(settingsVM)
                     .frame(height: 140)
-                
+
                 Divider()
-                
+
                 TasksView()
                     .environmentObject(tasksVM)
             }
-
+            .onAppear {
+                floatingWindowController.setup(timerVM: timerVM, settingsVM: settingsVM)
+            }
         } label: {
             pillTemplateImage(formatTimeForMenubar(timerVM.remainingTime))
         }
         .menuBarExtraStyle(.window)
     }
+}
 
+// MARK: - Floating Window Controller
+
+class FloatingWindowController: ObservableObject {
+    private var floatingWindow: FloatingTimerWindow?
+    private var cancellables = Set<AnyCancellable>()
+    private weak var settingsVM: SettingsViewModel?
+
+    func setup(timerVM: TimerViewModel, settingsVM: SettingsViewModel) {
+        guard self.settingsVM == nil else { return }
+        self.settingsVM = settingsVM
+
+        settingsVM.$showFloatingTimer
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] show in
+                self?.updateFloatingWindow(show: show, timerVM: timerVM)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func updateFloatingWindow(show: Bool, timerVM: TimerViewModel) {
+        if show {
+            if floatingWindow == nil {
+                floatingWindow = FloatingTimerWindow(timerVM: timerVM) { [weak self] in
+                    self?.settingsVM?.showFloatingTimer = false
+                }
+            }
+            floatingWindow?.show()
+        } else {
+            let windowToClose = floatingWindow
+            floatingWindow = nil
+            DispatchQueue.main.async {
+                windowToClose?.close()
+            }
+        }
+    }
 }
 func pillTemplateImage(_ text: String) -> Image {
     let pill = Text(text)
