@@ -24,6 +24,7 @@ Package.resolved
 # Archives
 *.xcarchive
 *.ipa
+*.zip
 
 # Crash logs
 *.crash
