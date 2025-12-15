@@ -23,6 +23,7 @@ A minimal macOS menu bar timer with task tracking.
 ### Homebrew (Recommended)
 
 ```bash
+brew tap Kiizon/musubi
 brew install --cask musubi
 ```
 
