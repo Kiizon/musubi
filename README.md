@@ -15,7 +15,7 @@ A minimal macOS menu bar timer with task tracking.
 
 ## Requirements
 
-- macOS 15.0 (Sequoia) or later
+- macOS 13.0 (Ventura) or later
 - Xcode 16+ (for building from source)
 
 ## Installation

@@ -23,6 +23,15 @@ struct RulerSlider: View {
     @State private var scrolledID: Int?
 
     var body: some View {
+        if #available(macOS 14.0, *) {
+            modernRulerSlider
+        } else {
+            legacyRulerSlider
+        }
+    }
+
+    @available(macOS 14.0, *)
+    private var modernRulerSlider: some View {
         GeometryReader { geometry in
             let halfWidth = geometry.size.width / 2
 
@@ -61,8 +70,49 @@ struct RulerSlider: View {
         }
         .frame(height: totalHeight)
     }
+
+    private var legacyRulerSlider: some View {
+        GeometryReader { geometry in
+            let halfWidth = geometry.size.width / 2
+
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: tickSpacing) {
+                        ForEach(range, id: \.self) { minute in
+                            TickMark(
+                                minute: minute,
+                                isMajor: minute % 10 == 0,
+                                isSelected: minute == value,
+                                accentColor: accentColor,
+                                minorHeight: minorTickHeight,
+                                majorHeight: majorTickHeight
+                            )
+                            .id(minute)
+                            .onTapGesture {
+                                value = minute
+                                withAnimation {
+                                    proxy.scrollTo(minute, anchor: .center)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, halfWidth)
+                }
+                .onAppear {
+                    proxy.scrollTo(value, anchor: .center)
+                }
+                .onChange(of: value) { newValue in
+                    withAnimation {
+                        proxy.scrollTo(newValue, anchor: .center)
+                    }
+                }
+            }
+        }
+        .frame(height: totalHeight)
+    }
 }
 
+@available(macOS 14.0, *)
 private struct NearestTickBehavior: ScrollTargetBehavior {
     let tickStep: CGFloat
     let tickCount: Int
@@ -106,6 +156,7 @@ private struct TickMark: View {
     }
 }
 
+@available(macOS 14.0, *)
 #Preview {
     @Previewable @State var minutes = 25
     VStack {

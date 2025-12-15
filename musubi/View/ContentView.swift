@@ -18,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading) {
             RulerSlider(value: $sliderMinutes, range: 0...120, accentColor: settings.accentColor)
-                .onChange(of: sliderMinutes) { oldValue, newValue in
+                .onChange(of: sliderMinutes) { newValue in
                     vm.setDuration(minutes: newValue)
                 }
 
