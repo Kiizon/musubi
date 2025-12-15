@@ -32,7 +32,7 @@ struct musubiApp: App {
                 floatingWindowController.setup(timerVM: timerVM, settingsVM: settingsVM)
             }
         } label: {
-            pillTemplateImage(formatTimeForMenubar(timerVM.remainingTime))
+            pillTemplateImage(formatTimeForMenubar(timerVM.remainingTime), highContrast: settingsVM.highContrastTimer, accentColor: settingsVM.accentColor)
         }
         .menuBarExtraStyle(.window)
     }
@@ -59,8 +59,8 @@ class FloatingWindowController: ObservableObject {
 
     private func updateFloatingWindow(show: Bool, timerVM: TimerViewModel) {
         if show {
-            if floatingWindow == nil {
-                floatingWindow = FloatingTimerWindow(timerVM: timerVM) { [weak self] in
+            if floatingWindow == nil, let settingsVM = settingsVM {
+                floatingWindow = FloatingTimerWindow(timerVM: timerVM, settingsVM: settingsVM) { [weak self] in
                     self?.settingsVM?.showFloatingTimer = false
                 }
             }
@@ -74,9 +74,10 @@ class FloatingWindowController: ObservableObject {
         }
     }
 }
-func pillTemplateImage(_ text: String) -> Image {
+func pillTemplateImage(_ text: String, highContrast: Bool, accentColor: Color) -> Image {
     let pill = Text(text)
         .font(.system(size: 10, weight: .semibold))
+        .foregroundColor(highContrast ? accentColor : .gray)
         .frame(width: 45, height: 15)
         .padding(.horizontal, 6)
         .padding(.vertical, 1)
@@ -90,6 +91,6 @@ func pillTemplateImage(_ text: String) -> Image {
     r.scale = NSScreen.main?.backingScaleFactor ?? 2
 
     guard let ns = r.nsImage else { return Image(systemName: "timer") }
-    ns.isTemplate = true
-    return Image(nsImage: ns).renderingMode(.template)
+    ns.isTemplate = !highContrast
+    return Image(nsImage: ns).renderingMode(highContrast ? .original : .template)
 }

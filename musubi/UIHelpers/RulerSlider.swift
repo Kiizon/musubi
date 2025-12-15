@@ -10,6 +10,7 @@ import SwiftUI
 struct RulerSlider: View {
     @Binding var value: Int
     let range: ClosedRange<Int>
+    var accentColor: Color = .white
 
     private let tickWidth: CGFloat = 8
     private let tickSpacing: CGFloat = 8
@@ -32,6 +33,7 @@ struct RulerSlider: View {
                             minute: minute,
                             isMajor: minute % 10 == 0,
                             isSelected: minute == scrolledID,
+                            accentColor: accentColor,
                             minorHeight: minorTickHeight,
                             majorHeight: majorTickHeight
                         )
@@ -80,14 +82,12 @@ private struct TickMark: View {
     let minute: Int
     let isMajor: Bool
     let isSelected: Bool
+    let accentColor: Color
     let minorHeight: CGFloat
     let majorHeight: CGFloat
 
     private var tickColor: Color {
-        if isSelected {
-            return .white
-        }
-        return .gray
+        isSelected ? accentColor : .gray
     }
 
     var body: some View {
@@ -99,7 +99,7 @@ private struct TickMark: View {
                 if isMajor {
                     Text("\(minute)")
                         .font(.system(size: 9))
-                        .foregroundColor(isSelected ? .white : .gray)
+                        .foregroundColor(isSelected ? accentColor : .gray)
                         .fixedSize()
                 }
             }
