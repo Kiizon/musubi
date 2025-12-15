@@ -27,6 +27,7 @@ struct musubiApp: App {
 
                 TasksView()
                     .environmentObject(tasksVM)
+                    .environmentObject(settingsVM)
             }
             .onAppear {
                 floatingWindowController.setup(timerVM: timerVM, settingsVM: settingsVM)

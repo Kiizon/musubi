@@ -7,22 +7,23 @@
 import SwiftUI
 
 struct TaskRow: View {
+    @EnvironmentObject var settings: SettingsViewModel
+
     let task: TaskItem
     var onToggleDone: () -> Void
     var onRename: (String) -> Void
     var onDelete: () -> Void
-    
-    
-    
+
     @State private var isEditing: Bool = false
     @State private var draftName: String = ""
     @FocusState private var isFocused: Bool
-    
+
     var body: some View {
         HStack {
             Button(action: onToggleDone) {
                 Image(systemName: task.isDone ? "checkmark.square.fill" : "square")
             }
+            .foregroundColor(task.isDone ? settings.accentColor : .primary.opacity(0.5))
             .buttonStyle(.plain)
             
             if isEditing {

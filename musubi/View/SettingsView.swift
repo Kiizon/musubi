@@ -140,17 +140,8 @@ private struct PlainCheckbox: View {
         Button {
             isOn.toggle()
         } label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 4)
-                    .stroke(isOn ? accentColor : Color.primary.opacity(0.3), lineWidth: 1.5)
-                if isOn {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundColor(accentColor)
-                }
-            }
-            .frame(width: 16, height: 16)
-            .contentShape(Rectangle())
+            Image(systemName: isOn ? "checkmark.square.fill" : "square")
+                .foregroundColor(isOn ? accentColor : .primary.opacity(0.5))
         }
         .buttonStyle(.plain)
     }
