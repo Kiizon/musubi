@@ -54,7 +54,7 @@ struct SettingsView: View {
                         .foregroundColor(.secondary)
                     Slider(value: $settings.alarmVolume, in: 0...1)
                         .tint(.gray.opacity(0.5))
-                        .onChange(of: settings.alarmVolume) { _, newValue in
+                        .onChange(of: settings.alarmVolume) { newValue in
                             playPreviewSound(volume: newValue)
                         }
                     Image(systemName: "speaker.wave.3.fill")
