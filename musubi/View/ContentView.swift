@@ -56,6 +56,22 @@ struct ContentView: View {
                 }
             }
 
+            HStack {
+                Button("\(settings.preset4)m") { setAndToggle(settings.preset4) }
+                    .buttonStyle(.plain)
+                    .hoverBackground()
+
+                Button("\(settings.preset5)m") { setAndToggle(settings.preset5) }
+                    .buttonStyle(.plain)
+                    .hoverBackground()
+
+                Button("\(settings.preset6)m") { setAndToggle(settings.preset6) }
+                    .buttonStyle(.plain)
+                    .hoverBackground()
+
+                Spacer()
+            }
+
             Spacer()
 
             HStack {

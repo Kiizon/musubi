@@ -30,6 +30,15 @@ struct SettingsView: View {
                     PresetStepper(value: $settings.preset3)
                         .frame(maxWidth: .infinity)
                 }
+                HStack(spacing: 8) {
+                    PresetStepper(value: $settings.preset4)
+                        .frame(maxWidth: .infinity)
+                    PresetStepper(value: $settings.preset5)
+                        .frame(maxWidth: .infinity)
+                    PresetStepper(value: $settings.preset6)
+                        .frame(maxWidth: .infinity)
+                }
+                
             }
 
             Divider()
@@ -42,14 +51,14 @@ struct SettingsView: View {
 
                 HStack {
                     Image(systemName: "speaker.fill")
-                        .foregroundColor(settings.accentColor)
+                        .foregroundColor(.secondary)
                     Slider(value: $settings.alarmVolume, in: 0...1)
                         .tint(.gray.opacity(0.5))
                         .onChange(of: settings.alarmVolume) { _, newValue in
                             playPreviewSound(volume: newValue)
                         }
                     Image(systemName: "speaker.wave.3.fill")
-                        .foregroundColor(settings.accentColor)
+                        .foregroundColor(.secondary)
                 }
             }
 
@@ -149,78 +158,19 @@ private struct PlainCheckbox: View {
 
 private struct PresetStepper: View {
     @Binding var value: Int
-    @State private var textValue: String = ""
-    @FocusState private var isFocused: Bool
+
+    private static let presetOptions = [1, 2, 3, 5, 10, 15, 20, 25, 30, 45, 60, 90, 120]
 
     var body: some View {
-        HStack(spacing: 4) {
-            TextField("", text: $textValue)
-                .textFieldStyle(.plain)
-                .monospacedDigit()
-                .frame(width: 32)
-                .multilineTextAlignment(.trailing)
-                .focused($isFocused)
-                .tint(.clear)
-                .onAppear { textValue = "\(value)" }
-                .onChange(of: value) { _, newValue in
-                    textValue = "\(newValue)"
-                }
-                .onChange(of: textValue) { _, newValue in
-                    let filtered = newValue.filter { $0.isNumber }
-                    if filtered != newValue {
-                        textValue = filtered
-                    }
-                }
-                .onSubmit {
-                    commitValue()
-                    isFocused = false
-                }
-                .onChange(of: isFocused) { _, focused in
-                    if !focused { commitValue() }
-                }
-
-            VStack(spacing: 0) {
-                Button {
-                    isFocused = true
-                    value = min(120, value + 1)
-                } label: {
-                    Image(systemName: "chevron.up")
-                        .font(.system(size: 8, weight: .medium))
-                        .frame(width: 16, height: 12)
-                }
-                .buttonStyle(.plain)
-                .opacity(0.5)
-
-                Button {
-                    isFocused = true
-                    value = max(1, value - 1)
-                } label: {
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 8, weight: .medium))
-                        .frame(width: 16, height: 12)
-                }
-                .buttonStyle(.plain)
-                .opacity(0.5)
+        Picker("", selection: $value) {
+            ForEach(Self.presetOptions, id: \.self) { minutes in
+                Text("\(minutes)").tag(minutes)
             }
         }
-        .padding(.horizontal, 6)
-        .padding(.vertical, 4)
-        .background(
-            RoundedRectangle(cornerRadius: 6)
-                .fill(isFocused ? Color.gray.opacity(0.2) : Color.clear)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
-        .focusEffectDisabled()
-    }
-
-    private func commitValue() {
-        if let parsed = Int(textValue), parsed >= 1, parsed <= 120 {
-            value = parsed
-        }
-        textValue = "\(value)"
+        .labelsHidden()
+        .pickerStyle(.menu)
+        .tint(Color.gray.opacity(0.6))
+        .frame(width: 60)
     }
 }
 

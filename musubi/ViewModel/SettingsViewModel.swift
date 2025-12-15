@@ -19,6 +19,15 @@ final class SettingsViewModel: ObservableObject {
     @Published var preset3: Int {
         didSet { UserDefaults.standard.set(preset3, forKey: "preset3") }
     }
+    @Published var preset4: Int {
+        didSet { UserDefaults.standard.set(preset4, forKey: "preset4") }
+    }
+    @Published var preset5: Int {
+        didSet { UserDefaults.standard.set(preset5, forKey: "preset5") }
+    }
+    @Published var preset6: Int {
+        didSet { UserDefaults.standard.set(preset6, forKey: "preset6") }
+    }
     @Published var alarmVolume: Double {
         didSet { UserDefaults.standard.set(alarmVolume, forKey: "alarmVolume") }
     }
@@ -53,6 +62,9 @@ final class SettingsViewModel: ObservableObject {
         self.preset1 = defaults.object(forKey: "preset1") as? Int ?? 5
         self.preset2 = defaults.object(forKey: "preset2") as? Int ?? 10
         self.preset3 = defaults.object(forKey: "preset3") as? Int ?? 25
+        self.preset4 = defaults.object(forKey: "preset4") as? Int ?? 45
+        self.preset5 = defaults.object(forKey: "preset5") as? Int ?? 60
+        self.preset6 = defaults.object(forKey: "preset6") as? Int ?? 90
         self.alarmVolume = defaults.object(forKey: "alarmVolume") as? Double ?? 0.5
         self.highContrastTimer = defaults.bool(forKey: "highContrastTimer")
         self.showFloatingTimer = defaults.bool(forKey: "showFloatingTimer")
