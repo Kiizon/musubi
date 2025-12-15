@@ -12,6 +12,7 @@ import AppKit
 
 struct FloatingTimerView: View {
     @ObservedObject var timerVM: TimerViewModel
+    @ObservedObject var settingsVM: SettingsViewModel
     var onClose: () -> Void
 
     @State private var isHovering = false
@@ -19,7 +20,7 @@ struct FloatingTimerView: View {
     var body: some View {
         Text(formatTime(timerVM.remainingTime))
             .font(.system(size: 24, weight: .medium, design: .monospaced))
-            .foregroundColor(.white)
+            .foregroundColor(settingsVM.accentColor)
             .frame(minWidth: 120)
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
@@ -54,10 +55,12 @@ struct FloatingTimerView: View {
 class FloatingTimerWindow {
     private var window: DraggableWindow?
     private var timerVM: TimerViewModel
+    private var settingsVM: SettingsViewModel
     private var onClose: () -> Void
 
-    init(timerVM: TimerViewModel, onClose: @escaping () -> Void) {
+    init(timerVM: TimerViewModel, settingsVM: SettingsViewModel, onClose: @escaping () -> Void) {
         self.timerVM = timerVM
+        self.settingsVM = settingsVM
         self.onClose = onClose
     }
 
@@ -67,7 +70,7 @@ class FloatingTimerWindow {
             return
         }
 
-        let contentView = FloatingTimerView(timerVM: timerVM, onClose: { [weak self] in
+        let contentView = FloatingTimerView(timerVM: timerVM, settingsVM: settingsVM, onClose: { [weak self] in
             // Defer to next run loop to avoid deallocating window while view is executing
             DispatchQueue.main.async {
                 self?.onClose()

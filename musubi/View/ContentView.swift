@@ -17,7 +17,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            RulerSlider(value: $sliderMinutes, range: 0...120)
+            RulerSlider(value: $sliderMinutes, range: 0...120, accentColor: settings.accentColor)
                 .onChange(of: sliderMinutes) { oldValue, newValue in
                     vm.setDuration(minutes: newValue)
                 }
@@ -71,8 +71,7 @@ struct ContentView: View {
                 Text(formatTime(vm.remainingTime))
                     .monospacedDigit()
                     .font(.largeTitle.monospacedDigit())
-                    .foregroundColor(settings.highContrastTimer ? .white : .primary)
-                    .shadow(color: settings.highContrastTimer ? .black.opacity(0.5) : .clear, radius: 1)
+                    .foregroundColor(settings.highContrastTimer ? settings.accentColor : .gray)
             }
         }
         .padding(12)

@@ -42,14 +42,14 @@ struct SettingsView: View {
 
                 HStack {
                     Image(systemName: "speaker.fill")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(settings.accentColor)
                     Slider(value: $settings.alarmVolume, in: 0...1)
                         .tint(.gray.opacity(0.5))
                         .onChange(of: settings.alarmVolume) { _, newValue in
                             playPreviewSound(volume: newValue)
                         }
                     Image(systemName: "speaker.wave.3.fill")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(settings.accentColor)
                 }
             }
 
@@ -64,7 +64,7 @@ struct SettingsView: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
-                PlainCheckbox(isOn: $settings.highContrastTimer)
+                PlainCheckbox(isOn: $settings.highContrastTimer, accentColor: settings.accentColor)
             }
 
             Divider()
@@ -81,11 +81,34 @@ struct SettingsView: View {
                 PlainCheckbox(isOn: Binding(
                     get: { settings.launchAtLogin },
                     set: { settings.launchAtLogin = $0 }
-                ))
+                ), accentColor: settings.accentColor)
+            }
+
+            Divider()
+
+            // Accent Color
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Accent Color")
+                    Text("Customize the app color")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+                ColorPicker("", selection: $settings.accentColor, supportsOpacity: false)
+                    .labelsHidden()
+                    .frame(width: 24, height: 24)
             }
         }
         .padding()
         .frame(width: 280)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            NSApp.keyWindow?.makeFirstResponder(nil)
+        }
+        .onAppear {
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 
     private static var previewSound: NSSound?
@@ -102,15 +125,23 @@ struct SettingsView: View {
 
 private struct PlainCheckbox: View {
     @Binding var isOn: Bool
+    var accentColor: Color = .primary
 
     var body: some View {
         Button {
             isOn.toggle()
         } label: {
-            Image(systemName: isOn ? "checkmark.square.fill" : "square")
-                .font(.system(size: 16))
-                .foregroundColor(.primary)
-                .opacity(0.5)
+            ZStack {
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(isOn ? accentColor : Color.primary.opacity(0.3), lineWidth: 1.5)
+                if isOn {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(accentColor)
+                }
+            }
+            .frame(width: 16, height: 16)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -129,9 +160,16 @@ private struct PresetStepper: View {
                 .frame(width: 32)
                 .multilineTextAlignment(.trailing)
                 .focused($isFocused)
+                .tint(.clear)
                 .onAppear { textValue = "\(value)" }
                 .onChange(of: value) { _, newValue in
                     textValue = "\(newValue)"
+                }
+                .onChange(of: textValue) { _, newValue in
+                    let filtered = newValue.filter { $0.isNumber }
+                    if filtered != newValue {
+                        textValue = filtered
+                    }
                 }
                 .onSubmit {
                     commitValue()
@@ -185,6 +223,7 @@ private struct PresetStepper: View {
         textValue = "\(value)"
     }
 }
+
 
 #Preview {
     SettingsView()
