@@ -2,9 +2,9 @@
 
 A minimal macOS menu bar timer with task tracking.
 
-![MainScreen](/images/mainscreen)
-![FloatingDisplay](/images/floatingdisplay)
-![Settings](/images/settings)
+![MainScreen](images/mainscreen.png)
+![FloatingDisplay](images/floatingdisplay.png)
+![Settings](images/settings.png)
 
 ## Features
 
